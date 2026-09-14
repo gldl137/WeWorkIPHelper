@@ -1,0 +1,155 @@
+<div class="fade-in max-w-7xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold gradient-text">系统仪表盘</h1>
+            <p class="text-base-content/60 mt-1">实时监控和管理您的企微 IP 助手</p>
+        </div>
+        <button class="btn btn-primary btn-circle shadow-lg" onclick="refreshDashboardData()" title="刷新数据" data-testid="dashboard-refresh-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+        </button>
+    </div>
+    
+    <!-- 状态卡片 -->
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <!-- 登录状态 -->
+        <div class="stat-card card bg-base-200 border border-base-content/20 cursor-pointer hover:scale-105 transition-transform" onclick="showPage('login')">
+            <div class="card-body items-center text-center p-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-3 shadow-lg shadow-primary/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <h2 class="text-sm font-medium text-base-content/70 mb-1">登录状态</h2>
+                <div id="login-status" class="text-2xl font-bold">
+                    <span class="loading loading-spinner loading-sm"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 上次更新时间 -->
+        <div class="stat-card card bg-base-200 border border-base-content/20">
+            <div class="card-body items-center text-center p-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/5 flex items-center justify-center mb-3 shadow-lg shadow-warning/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="text-sm font-medium text-base-content/70 mb-1">上次更新</h2>
+                <div class="flex items-center justify-center gap-2">
+                    <div id="last-update" class="text-sm font-bold">
+                        <span class="loading loading-spinner loading-sm"></span>
+                    </div>
+                    <button class="btn btn-xs btn-primary" onclick="forceUpdateIP()" data-testid="force-update-ip-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 当前公网 IP -->
+        <div class="stat-card card bg-base-200 border border-base-content/20">
+            <div class="card-body items-center text-center p-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-info/20 to-info/5 flex items-center justify-center mb-3 shadow-lg shadow-info/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                </div>
+                <h2 class="text-sm font-medium text-base-content/70 mb-1">当前公网 IP</h2>
+                <div id="current-ip" class="text-xl font-bold font-mono break-all">
+                    <span class="loading loading-spinner loading-sm"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 上次更新IP -->
+        <div class="stat-card card bg-base-200 border border-base-content/20">
+            <div class="card-body items-center text-center p-6">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center mb-3 shadow-lg shadow-success/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h2 class="text-sm font-medium text-base-content/70 mb-1">上次更新IP</h2>
+                <div id="last-updated-ip" class="text-xl font-bold font-mono break-all">
+                    <span class="loading loading-spinner loading-sm"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-base-200 border border-base-content/20 hidden md:block cursor-pointer hover:scale-[1.01] transition-transform" onclick="showPage('settings')">
+        <div class="card-body">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="card-title text-lg">定时任务调度</h2>
+                    <p class="text-sm text-base-content/60">自动执行的任务列表</p>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto rounded-xl bg-base-200/30" onclick="event.stopPropagation()">
+                <table class="table w-full">
+                    <colgroup>
+                        <col style="width: 22%; min-width: 130px;">
+                        <col style="width: 28%; min-width: 150px;">
+                        <col style="width: 20%; min-width: 120px;">
+                        <col style="width: 18%; min-width: 120px;">
+                        <col style="width: 12%; min-width: 80px;">
+                    </colgroup>
+                    <thead>
+                        <tr class="border-b border-base-content/10">
+                            <th class="text-base-content/70 font-semibold">任务名称</th>
+                            <th class="text-base-content/70 font-semibold">执行周期</th>
+                            <th class="text-base-content/70 font-semibold">状态</th>
+                            <th class="text-base-content/70 font-semibold">下次执行</th>
+                            <th class="text-base-content/70 font-semibold text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-table">
+                        <tr>
+                            <td colspan="5" class="text-center py-12">
+                                <div class="flex flex-col items-center">
+                                    <span class="loading loading-spinner loading-lg text-primary"></span>
+                                    <p class="mt-4 text-base-content/50">加载任务列表...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 任务调度卡片 - 手机端 -->
+    <div class="md:hidden cursor-pointer hover:scale-[1.01] transition-transform" onclick="showPage('settings')">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="card-title text-lg">定时任务调度</h2>
+                <p class="text-sm text-base-content/60">自动执行的任务列表</p>
+            </div>
+        </div>
+        <div id="task-cards-mobile" class="space-y-3" onclick="event.stopPropagation()">
+            <div class="card bg-base-200 border border-base-content/20">
+                <div class="card-body p-4">
+                    <div class="flex items-center justify-center py-8">
+                        <span class="loading loading-spinner loading-lg text-primary"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

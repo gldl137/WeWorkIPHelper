@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 强制刷新缓存 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- 立即主题修复 -->
+    <script>
+        document.documentElement.setAttribute('data-theme', 'night');
+        (function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                        if (document.documentElement.getAttribute('data-theme') !== 'night') {
+                            document.documentElement.setAttribute('data-theme', 'night');
+                        }
+                    }
+                });
+            });
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme']
+            });
+        })();
+    </script>
+
+    <title>{% block title %}企微 IP 助手 | weworkiphelper{% endblock %}</title>
+
+    <!-- Tailwind CSS + DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+        if (typeof console !== 'undefined' && console.warn) {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0] && args[0].includes && args[0].includes('cdn.tailwindcss.com should not be used in production')) {
+                    return;
+                }
+                originalWarn.apply(console, args);
+            };
+        }
+    </script>
+
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260214">
+
+    <!-- 关键样式内联，确保布局正确 -->
+    <style>
+        .main-content {
+            margin-left: 280px !important;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+        
+        /* 默认隐藏页面内容，防止刷新时闪烁 */
+        body:not(.page-ready) .sidebar-nav,
+        body:not(.page-ready) .top-nav-container,
+        body:not(.page-ready) .main-content {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        /* 当页面准备好时显示内容 */
+        body.page-ready .sidebar-nav,
+        body.page-ready .top-nav-container,
+        body.page-ready .main-content {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen bg-base-100 text-base-content">
+    <!-- 移动端遮罩层 -->
+    <div class="mobile-overlay" id="mobile-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar-nav" id="sidebar-nav">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <span class="text-xl font-bold gradient-text">企微 IP 助手</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <ul class="menu menu-vertical">
+                <li class="sidebar-menu-item">
+                    <a href="#dashboard" class="sidebar-menu-link" data-page="dashboard" onclick="handleNavClick(event, 'dashboard')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-menu-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span>仪表盘</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#apps" class="sidebar-menu-link" data-page="apps" onclick="handleNavClick(event, 'apps')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-menu-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <span>应用管理</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#login" class="sidebar-menu-link" data-page="login" onclick="handleNavClick(event, 'login')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-menu-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span>企微登录</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#settings" class="sidebar-menu-link" data-page="settings" onclick="handleNavClick(event, 'settings')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-menu-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>系统设置</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="text-xs text-base-content/50 text-center">
+                <p>企微 IP 助手 v1.6</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 顶部导航栏 -->
+        <div class="top-nav-container">
+            <!-- 桌面端导航栏 -->
+            <div class="navbar desktop-top-nav">
+                <div class="navbar-start">
+                    <button class="btn btn-ghost lg:hidden" onclick="toggleMobileSidebar()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="navbar-end">
+                    <button class="btn btn-ghost btn-circle" onclick="showLogs()" title="查看日志">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-ghost btn-circle" onclick="handleLogout()" title="退出登录">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端导航栏 -->
+            <div class="navbar mobile-top-nav">
+                <div class="navbar-start">
+                    <button class="btn btn-ghost" onclick="toggleMobileSidebar()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="navbar-end">
+                    <button class="btn btn-ghost btn-circle" onclick="showLogs()" title="查看日志">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-ghost btn-circle" onclick="handleLogout()" title="退出登录">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面内容 -->
+        <div id="page-content" class="p-4 lg:p-6">
+            {% block content %}
+            <!-- 页面内容将通过JavaScript动态加载 -->
+            <div class="flex flex-col items-center justify-center min-h-[60vh]">
+                <div class="relative">
+                    <div class="loading-spinner w-12 h-12 border-4"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-4 h-4 bg-primary rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                <p class="mt-6 text-lg text-base-content/60 animate-pulse">正在加载...</p>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Toast容器 -->
+    <div id="toast-container" class="toast toast-top toast-center z-[100]"></div>
+
+    <!-- JavaScript -->
+    <div id="app-data"
+         data-api-token="{{ api_token | tojson }}"
+         data-need-init="{{ need_init | tojson }}"
+         data-webhook-url="{{ webhook_url | tojson }}"
+         style="display: none;"></div>
+
+    <!-- 模块化JavaScript -->
+    <script src="{{ url_for('static', filename='js/utils.js') }}?v=20260214"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}?v=20260214"></script>
+    <script src="{{ url_for('static', filename='js/cookie.js') }}?v=20260214"></script>
+    <script src="{{ url_for('static', filename='js/apps.js') }}?v=20260214"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}?v=20260214"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=20260214"></script>
+
+    <!-- 强制主题修复 -->
+    <script>
+        (function() {
+            const forceTheme = 'dim';
+            const html = document.documentElement;
+            html.setAttribute('data-theme', forceTheme);
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.style.backgroundColor = '';
+                document.body.style.backgroundImage = '';
+                const computedStyle = window.getComputedStyle(document.body);
+                const bgColor = computedStyle.backgroundColor;
+                if (bgColor === 'rgb(255, 255, 255)' || bgColor === '#ffffff') {
+                    document.body.style.backgroundColor = 'hsl(var(--b1))';
+                    document.body.style.color = 'hsl(var(--bc))';
+                }
+            });
+            setTimeout(function() {
+                if (html.getAttribute('data-theme') !== forceTheme) {
+                    html.setAttribute('data-theme', forceTheme);
+                }
+            }, 1000);
+        })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

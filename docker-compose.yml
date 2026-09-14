@@ -1,0 +1,28 @@
+# WeWorkIPHelper - Docker Compose 配置
+# 架构：Flask + DaisyUI/Tailwind CSS + API Mode
+
+services:
+  wework-helper:
+    build:
+      # 构建上下文固定为 app/（app/Dockerfile 内的 COPY backend/... 以此目录为根）
+      context: ./app
+      dockerfile: Dockerfile
+    image: gldl137/weworkiphelper:1.6
+    # 镜像支持多架构（linux/amd64、linux/arm/v7），会按当前设备自动选择；
+    # 如需强制指定架构（例如在 x86 上跑 arm 版），取消下面注释：
+    # platform: linux/arm/v7
+    container_name: wework-helper
+    # 以 unraid 默认文件属主 (nobody:users = 99:100) 运行，才能读写挂载的 ./app/data
+    # （镜像内默认 appuser 是 uid 1000，而 unraid 共享文件属主是 99:100，uid 1000 无权写入）
+    user: "99:100"
+    ports:
+      # 主应用端口：外部 5000 -> 容器内部 5000
+      - "5000:5000"
+      # 可信域名验证服务端口：外部 5001 -> 容器内部 5001
+      - "5001:5001"
+    volumes:
+      - ./app/data:/app/data         # 数据目录（配置、数据库、日志等），宿主机需 uid 1000 可写
+    environment:
+      - TZ=Asia/Shanghai             # 日志时间时区
+      - IS_DOCKER=true
+    restart: unless-stopped

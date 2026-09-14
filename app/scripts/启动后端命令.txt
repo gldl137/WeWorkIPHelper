@@ -1,0 +1,2 @@
+cd /app
+bash scripts/start-backend.sh

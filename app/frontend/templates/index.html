@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}企微 IP 助手 | 仪表盘{% endblock %}
+
+{% block content %}
+<!-- 页面内容将通过JavaScript动态加载 -->
+<div class="flex flex-col items-center justify-center min-h-[60vh]">
+    <div class="relative">
+        <div class="loading-spinner w-12 h-12 border-4"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-4 h-4 bg-primary rounded-full animate-pulse"></div>
+        </div>
+    </div>
+    <p class="mt-6 text-lg text-base-content/60 animate-pulse">正在加载...</p>
+</div>
+{% endblock %}

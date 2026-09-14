@@ -1,0 +1,268 @@
+<div class="fade-in max-w-7xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold gradient-text">系统设置</h1>
+        <p class="text-base-content/60 mt-1">配置系统安全和通知选项</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 安全配置 -->
+        <div class="card bg-base-200 border border-card">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="card-title text-lg">安全设置</h2>
+                        <p class="text-sm text-base-content/60">修改管理密码</p>
+                    </div>
+                </div>
+                
+                <form id="settings-password-form" onsubmit="updatePassword(event)">
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-medium">新管理密码</span>
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="settings-new-password" class="input w-full pl-10 bg-card focus:bg-base-100 transition-colors border border-card focus:border-base-content/40" 
+                                   placeholder="输入新密码（至少6位）" minlength="6" required data-testid="new-password-input">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-medium">确认新密码</span>
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="settings-confirm-password" class="input w-full pl-10 bg-card focus:bg-base-100 transition-colors border border-card focus:border-base-content/40" 
+                                   placeholder="再次输入新密码" minlength="6" required data-testid="confirm-password-input">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-error shadow-lg shadow-error/20 hover:shadow-error/40" data-testid="update-password-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                        </svg>
+                        更新密码
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 通知配置 -->
+        <div class="card bg-base-200 border border-card">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="card-title text-lg">通知设置</h2>
+                        <p class="text-sm text-base-content/60">配置企业微信Webhook通知</p>
+                    </div>
+                </div>
+                
+                <form id="settings-webhook-form" onsubmit="updateWebhook(event)">
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-medium">启用通知</span>
+                        </label>
+                        <div class="slide-switch-label">
+                            <label class="slide-switch notification-switch">
+                                <input type="checkbox" id="notification-enabled" onchange="toggleNotification()" data-testid="notification-enabled" />
+                                <span class="slide-switch-slider"></span>
+                            </label>
+                            <span class="slide-switch-status" id="notification-status-text">已禁用</span>
+                            <span class="label-text">开启后将发送企业微信通知</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-medium">Webhook 地址</span>
+                        </label>
+                        <div class="relative">
+                            <input type="url" id="settings-webhook-url" class="input w-full pl-10 bg-card focus:bg-base-100 transition-colors border border-card focus:border-base-content/40" 
+                                   placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx" data-testid="webhook-url-input">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                        </div>
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/50">在企业微信群机器人设置中获取</span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button type="submit" class="btn btn-success flex-1 shadow-lg shadow-success/20 hover:shadow-success/40" data-testid="save-webhook-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                            </svg>
+                            保存配置
+                        </button>
+                        <button type="button" class="btn btn-outline btn-info" onclick="testWebhook()" data-testid="test-webhook-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            测试
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 定时任务配置 -->
+        <div class="card bg-base-200 border border-card lg:col-span-2">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="card-title text-lg">定时任务配置</h2>
+                        <p class="text-sm text-base-content/60">设置各定时任务的cron表达式</p>
+                    </div>
+                </div>
+                
+                <form id="settings-tasks-form" onsubmit="updateTaskCrons(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">登录状态检查</span>
+                                <span class="label-text-alt text-base-content/50">微信2小时过期，建议设置1小时</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text" id="task-login-check" class="input w-full pl-10 bg-card focus:bg-base-100 transition-colors border border-card focus:border-base-content/40" 
+                                       placeholder="0 * * * *" required data-testid="task-login-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-base-content/50">格式：分 时 日 月 周。示例：0 * * * *（每小时）、0 2 * * *（每天2点）</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">公网IP检测</span>
+                                <span class="label-text-alt text-base-content/50">建议设置7天以内</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text" id="task-public-ip-check" class="input w-full pl-10 bg-card focus:bg-base-100 transition-colors border border-card focus:border-base-content/40" 
+                                       placeholder="*/30 * * * *" required data-testid="task-public-ip-check">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2v-1a2 2 0 012-2h-.055" />
+                                </svg>
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-base-content/50">格式：分 时 日 月 周（如：*/30 * * * * 表示每30分钟）</span>
+                            </label>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="card-actions justify-end mt-4">
+                        <button type="submit" class="btn btn-success shadow-lg shadow-success/20 hover:shadow-success/40" data-testid="update-tasks-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                            </svg>
+                            保存任务配置
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 可信域名验证 -->
+        <div class="card bg-base-200 border border-base-content/20 lg:col-span-2">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9 9 9 0 01-9-9m2.366 9.719a9 9 0 01-10.93 0" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="card-title text-lg">可信域名验证</h2>
+                        <p class="text-sm text-base-content/60">企业微信可信域名验证文件管理</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <label class="slide-switch verify-switch">
+                            <input type="checkbox" id="verify-enabled" onchange="toggleVerifyService()" data-testid="verify-enabled" />
+                            <span class="slide-switch-slider"></span>
+                        </label>
+                        <span class="slide-switch-status" id="verify-status-text">已禁用</span>
+                        <span class="label-text font-medium">启用验证服务</span>
+                    </div>
+                    <div class="text-sm text-base-content/70">
+                        <span>验证地址：</span>
+                        <span id="verify-address">http://localhost:5001</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
+                        <label class="label-text font-medium">
+                            验证文件管理
+                            <span class="text-info cursor-pointer hover:underline ml-1" onclick="showVerifyFileHelp()">如何获取?</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline btn-error flex-1 sm:flex-none" id="delete-selected-file" onclick="deleteSelectedVerifyFile()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                删除
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline btn-info flex-1 sm:flex-none" onclick="refreshVerifyFiles()" data-testid="refresh-verify-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                刷新
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline btn-success flex-1 sm:flex-none" onclick="document.getElementById('verify-file-input').click()" data-testid="upload-verify-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                上传
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 隐藏的文件输入，通过按钮触发 -->
+                    <input type="file" id="verify-file-input" class="hidden" accept=".txt" data-testid="verify-file-input" onchange="handleVerifyFileSelect(this)" />
+                    
+                    <div class="text-xs text-base-content/60 mb-2">
+                        上传企业微信「设置可信域名」时下载的
+                        <code class="bg-base-300/60 px-1 rounded">WW_verify_xxxxxxxx.txt</code> 文件，
+                        并确保验证地址能访问到该文件内容。
+                    </div>
+                    
+                    <div id="verify-files-list" class="space-y-2">
+                        <div class="text-base-content/60 text-sm">加载中...</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

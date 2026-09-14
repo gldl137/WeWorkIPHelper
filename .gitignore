@@ -1,0 +1,52 @@
+# =============================================================================
+# WeWorkIPHelper .gitignore
+# =============================================================================
+
+# ---------- 运行时数据（含 SQLite 数据库 / 密钥 / 日志，绝对不要提交）----------
+app/data/
+data/
+**/WW_verify/*.txt
+
+# ---------- 本地依赖目录 ----------
+app/pip-packages/
+**/pip-packages/
+.pip/
+.venv/
+venv/
+env/
+node_modules/
+
+# 说明：app/backend/static 与 app/backend/templates 是前端构建产物，随仓库提交
+# 以便 Docker 直接构建（前端源码见 app/frontend/）。
+
+# ---------- buildx 构建器配置（历史遗留）----------
+app/.buildx/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+
+# ---------- 日志 / 临时文件 ----------
+*.log
+logs/
+.run/
+*.pid
+*.bak
+*.tmp
+*.swp
+*~
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

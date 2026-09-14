@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>初始化 - 企微 IP 助手</title>
+    
+    <!-- Tailwind CSS + DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+        if (typeof console !== 'undefined' && console.warn) {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0] && args[0].includes && args[0].includes('cdn.tailwindcss.com should not be used in production')) {
+                    return;
+                }
+                originalWarn.apply(console, args);
+            };
+        }
+    </script>
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-base-100 flex items-center justify-center">
+    <div class="container mx-auto px-4 py-12 max-w-lg">
+        <div class="text-center mb-8 fade-in">
+            <div class="w-24 h-24 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-primary/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold mb-3 gradient-text">欢迎使用企微 IP 助手</h1>
+            <p class="text-base-content/60 text-lg">首次使用，请完成以下初始化设置</p>
+        </div>
+        
+        <div class="card bg-base-200 border border-base-content/20 fade-in" style="animation-delay: 0.1s">
+            <div class="card-body p-8">
+                <form id="init-form">
+                    <div class="form-control mb-6">
+                        <label class="label">
+                            <span class="label-text font-semibold text-lg">设置管理密码</span>
+                            <span class="label-text-alt text-error">* 必填</span>
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="init-admin-token" class="input input-lg w-full pl-12 border border-base-content/20 focus:border-base-content/40" 
+                                   placeholder="请设置至少6位的管理密码" minlength="6" required>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/50">用于保护管理功能，请牢记此密码</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-block btn-lg shadow-lg shadow-success/30 hover:shadow-success/50 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        完成初始化
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast容器 -->
+    <div id="toast-container" class="toast toast-top toast-center z-[100]"></div>
+
+    <!-- 初始化脚本 -->
+    <script src="/static/js/init.js"></script>
+</body>
+</html>

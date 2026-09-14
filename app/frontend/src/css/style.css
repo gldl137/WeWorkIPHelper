@@ -1,0 +1,531 @@
+/* =============================================================================
+ * WeWorkIPHelper 前端样式
+ * 依赖 DaisyUI (night 主题) + Tailwind CDN，此处只写自定义布局与组件
+ * ========================================================================== */
+
+:root {
+    --sidebar-width: 280px;
+}
+
+/* 兜底：不依赖 DaisyUI 主题变量的深色底与文字色
+   （DaisyUI/Tailwind CDN 未加载或变量未生效时，页面依然可读、弹窗不透明） */
+html,
+body {
+    background-color: #1d283a;
+    color: #e5e7eb;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    overflow-x: hidden;
+}
+
+/* ==================== 通用 ==================== */
+
+.gradient-text {
+    /* 兜底色：即使渐变/裁剪不生效，文字也不会变成透明看不见 */
+    color: #7dd3fc;
+    /* 固定色渐变，不依赖 DaisyUI 主题变量 */
+    background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 极端兜底：不支持 background-clip: text 时，撤销透明填充，保证文字可见 */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    .gradient-text {
+        -webkit-text-fill-color: currentColor;
+        background: none;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.loading-spinner {
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.15);
+    border-top-color: #38bdf8;
+    animation: spinnerRotate 0.9s linear infinite;
+}
+
+.loading-spinner.sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 2px;
+}
+
+.loading-spinner.lg {
+    width: 3rem;
+    height: 3rem;
+}
+
+@keyframes spinnerRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==================== 侧边栏 ==================== */
+
+.sidebar-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #1d283a;
+    /* 侧边栏与内容区之间的竖直分隔线
+       （用固定色而非主题变量，避免变量未生效时整条 border 声明失效） */
+    border-right: 1px solid rgba(255, 255, 255, 0.16);
+    z-index: 50;
+    transition: transform 0.25s ease;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* logo 方块：模板用的是 Tailwind 的 from-primary/to-secondary（CDN 默认色板里没有，
+   可能不生成），这里用固定蓝紫渐变兜底，保证 logo 与项目名一起可见 */
+.sidebar-logo > div:first-child {
+    background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 100%);
+    box-shadow: 0 10px 24px rgba(56, 189, 248, 0.3);
+}
+
+.sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar-menu-item {
+    margin-bottom: 4px;
+}
+
+.sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    color: hsl(var(--bc) / 0.75);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-menu-link:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: hsl(var(--bc));
+}
+
+.sidebar-menu-link.active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.sidebar-menu-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    /* 版本信息上方的横线 */
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ==================== 主区域 ==================== */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.top-nav-container {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: #1d283a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-top-nav {
+    display: none;
+}
+
+.mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 45;
+    display: none;
+}
+
+.mobile-overlay.show {
+    display: block;
+}
+
+@media (max-width: 1024px) {
+    .sidebar-nav {
+        transform: translateX(-100%);
+    }
+
+    .sidebar-nav.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    .desktop-top-nav {
+        display: none;
+    }
+
+    .mobile-top-nav {
+        display: flex;
+    }
+}
+
+/* ==================== 统计卡片 ==================== */
+
+.stat-card {
+    border-radius: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* ==================== 表格 ==================== */
+
+.table thead th {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: hsl(var(--bc) / 0.6);
+}
+
+.table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* 表格行分隔线（不依赖主题变量的固定色，避免变量未生效时线消失） */
+.row-divider {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ==================== 滑动开关 ==================== */
+
+.slide-switch-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.slide-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.slide-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slide-switch-slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    transition: background 0.3s ease;
+}
+
+.slide-switch-slider::before {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.slide-switch input:checked + .slide-switch-slider {
+    background: #16a34a;
+}
+
+.slide-switch input:checked + .slide-switch-slider::before {
+    transform: translateX(24px);
+}
+
+.slide-switch input:disabled + .slide-switch-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.slide-switch-status {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--bc) / 0.7);
+}
+
+/* ==================== Toast ==================== */
+
+#toast-container {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.toast-item {
+    pointer-events: auto;
+    min-width: 220px;
+    max-width: min(90vw, 480px);
+    padding: 12px 18px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    animation: toastIn 0.25s ease-out both;
+    word-break: break-all;
+}
+
+.toast-item.out {
+    animation: toastOut 0.25s ease-in both;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes toastOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+}
+
+/* ==================== 弹窗 ==================== */
+
+.modal-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    /* 半透明遮罩：弹窗本体是实色，但背景仍能透出后面的页面，不会把页面"盖没" */
+    background: rgba(0, 0, 0, 0.5);
+    animation: maskFade 0.2s ease-out both;
+}
+
+@keyframes maskFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 720px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    /* 实色底板（base-200），与实色遮罩形成层次 */
+    background: #243044;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.modal-body {
+    padding: 16px 20px;
+    overflow-y: auto;
+}
+
+.log-viewer {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: hsl(var(--bc) / 0.85);
+}
+
+/* ==================== 表格 / 列表 ==================== */
+
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: hsl(var(--bc) / 0.5);
+}
+
+/* ==================== 应用名称可编辑 ==================== */
+
+.editable-name {
+    cursor: pointer;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.35);
+}
+
+.editable-name:hover {
+    color: #38bdf8;
+    border-bottom-color: #38bdf8;
+}
+
+/* ==================== 未鉴权：全屏登录界面 ==================== */
+
+/* 未登录时彻底隐藏应用框架，避免登录界面背后出现项目页面内容 */
+body.auth-required .sidebar-nav,
+body.auth-required .main-content {
+    display: none !important;
+}
+
+/* 提示消息需盖在登录层之上 */
+#toast-container {
+    z-index: 500;
+}
+
+#auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: #1d283a;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 2rem 1.75rem;
+    border-radius: 18px;
+    text-align: center;
+    background: #243044;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.auth-logo {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 100%);
+    box-shadow: 0 10px 24px rgba(56, 189, 248, 0.3);
+}
+
+.auth-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+
+.auth-subtitle {
+    font-size: 0.85rem;
+    color: hsl(var(--bc) / 0.6);
+    margin-bottom: 1.25rem;
+    word-break: break-all;
+}
+
+.auth-input {
+    text-align: center;
+}
+
+.auth-error {
+    margin-top: 0.75rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    text-align: left;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}

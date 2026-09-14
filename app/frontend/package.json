@@ -1,0 +1,10 @@
+{
+  "name": "weworkiphelper-frontend",
+  "version": "1.6.0",
+  "private": true,
+  "type": "module",
+  "description": "WeWorkIPHelper 前端源码（Jinja 模板 + 原生 JS/CSS）。构建产物输出到 backend/static 与 backend/templates。",
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}
